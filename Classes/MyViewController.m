@@ -23,6 +23,7 @@ static NSArray *__pageControlColorList = nil;
 - (id)initWithPageNumber:(int)page {
     if (self = [super initWithNibName:@"MyView" bundle:nil]) {
         pageNumber = page;
+        self.view.backgroundColor = [MyViewController pageControlColorWithIndex:page];
     }
     
     return self;

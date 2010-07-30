@@ -20,7 +20,7 @@
 #pragma mark Globals
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static NSUInteger kNumberOfPages = 2;
+static NSUInteger kNumberOfPages = 5;
 
 
 
@@ -111,10 +111,12 @@ static NSUInteger kNumberOfPages = 2;
 			break;
 	}
 	
-	UINavigationController *nc = [[[MBNavigationController alloc] initWithRootViewController:vc] autorelease];
-	nc.delegate = self;
-	
-	return nc;
+    
+	//UINavigationController *nc = [[[MBNavigationController alloc] initWithRootViewController:vc] autorelease];
+	//nc.delegate = self;
+	//return nc;
+    
+    return vc;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
