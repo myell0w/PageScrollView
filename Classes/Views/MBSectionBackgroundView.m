@@ -55,6 +55,10 @@
 
 
 - (void)dealloc {
+	RELEASE(imageName_);
+	RELEASE(imageLandscape_);
+	RELEASE(image_);
+	
 	[super dealloc];
 }
 

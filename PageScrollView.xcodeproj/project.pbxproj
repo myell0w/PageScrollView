@@ -31,7 +31,6 @@
 		39801FA01202057300AA3CF4 /* MBSectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 39801F9F1202057300AA3CF4 /* MBSectionDelegate.m */; };
 		39B2B5601201C8AB00E2BE28 /* MBSectionBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 39B2B55F1201C8AB00E2BE28 /* MBSectionBackgroundView.m */; };
 		39D503C7120221DA00CF4A51 /* MBOverviewSectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 39D503C6120221DA00CF4A51 /* MBOverviewSectionDelegate.m */; };
-		39D5068E1202E9A600CF4A51 /* MBNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39D5068D1202E9A600CF4A51 /* MBNavigationController.m */; };
 		39D586A612034ABD0073552B /* MBSectionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 39D586A512034ABD0073552B /* MBSectionVC.m */; };
 		39F9435A1203384A0069A2B1 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39F943591203384A0069A2B1 /* MessageUI.framework */; };
 		D459D71212032AFC00D19641 /* Home-iPad-L.png in Resources */ = {isa = PBXBuildFile; fileRef = D459D70D12032AFC00D19641 /* Home-iPad-L.png */; };
@@ -86,8 +85,6 @@
 		39B2B55F1201C8AB00E2BE28 /* MBSectionBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBSectionBackgroundView.m; path = Views/MBSectionBackgroundView.m; sourceTree = "<group>"; };
 		39D503C5120221DA00CF4A51 /* MBOverviewSectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBOverviewSectionDelegate.h; path = "View Controller/Table View Delegates & Data Sources/MBOverviewSectionDelegate.h"; sourceTree = "<group>"; };
 		39D503C6120221DA00CF4A51 /* MBOverviewSectionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBOverviewSectionDelegate.m; path = "View Controller/Table View Delegates & Data Sources/MBOverviewSectionDelegate.m"; sourceTree = "<group>"; };
-		39D5068C1202E9A600CF4A51 /* MBNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBNavigationController.h; path = "View Controller/MBNavigationController.h"; sourceTree = "<group>"; };
-		39D5068D1202E9A600CF4A51 /* MBNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBNavigationController.m; path = "View Controller/MBNavigationController.m"; sourceTree = "<group>"; };
 		39D586A412034ABD0073552B /* MBSectionVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBSectionVC.h; sourceTree = "<group>"; };
 		39D586A512034ABD0073552B /* MBSectionVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBSectionVC.m; sourceTree = "<group>"; };
 		39F943591203384A0069A2B1 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
@@ -304,8 +301,6 @@
 				39801F9D1202051900AA3CF4 /* Table View Delegates & DataSources */,
 				3938E9841200AFB60005DBA8 /* MBPageScrollVC.h */,
 				3938E9851200AFB60005DBA8 /* MBPageScrollVC.m */,
-				39D5068C1202E9A600CF4A51 /* MBNavigationController.h */,
-				39D5068D1202E9A600CF4A51 /* MBNavigationController.m */,
 				39D586A412034ABD0073552B /* MBSectionVC.h */,
 				39D586A512034ABD0073552B /* MBSectionVC.m */,
 			);
@@ -368,7 +363,6 @@
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "PageScrollView" */;
 			compatibilityVersion = "Xcode 3.1";
-			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -424,7 +418,6 @@
 				39801E6A1201D7F500AA3CF4 /* ImageHelper.m in Sources */,
 				39801FA01202057300AA3CF4 /* MBSectionDelegate.m in Sources */,
 				39D503C7120221DA00CF4A51 /* MBOverviewSectionDelegate.m in Sources */,
-				39D5068E1202E9A600CF4A51 /* MBNavigationController.m in Sources */,
 				39D586A612034ABD0073552B /* MBSectionVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,4 +1,4 @@
-    //
+//
 //  MBScrollingVC.m
 //  Mercedes
 //
@@ -8,6 +8,7 @@
 
 #import "MBPageScrollVC.h"
 #import "AppDelegate.h"
+
 
 
 @implementation MBPageScrollVC
@@ -28,9 +29,10 @@
 // the designated initializer
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-		pageScrollView_ = [[MBPageScrollView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] 
+		pageScrollView_ = [[MBPageScrollView alloc] initWithFrame:MBApplicationFrame()
 													   dataSource:MBApplicationDelegate
 														 delegate:MBApplicationDelegate];
+		
 		
 		[self.view addSubview:self.pageScrollView];
     }
@@ -59,11 +61,11 @@
 }
 
 /*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
-*/
+ // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+ - (void)viewDidLoad {
+ [super viewDidLoad];
+ }
+ */
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
@@ -76,10 +78,20 @@
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	
+	[self.pageScrollView willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	
 	// call willRotate for all created view controllers
 	for (id vc in self.pageScrollView.viewControllers) {
 		if ((NSNull *)vc != [NSNull null]) {
 			[vc willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+			
+			// make every other viewController invisible during animation
+			// this prevents that the next vc appears at the edge of the screen when rotating to Landscape
+			if (vc != self.pageScrollView.currentController) {
+				[vc view].alpha = 0.0;
+			}
 		}
 	}
 }
@@ -87,12 +99,17 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 	
-	[self.pageScrollView deviceDidRotate];
+	[self.pageScrollView didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 	
 	// call didRotate for all created view controllers
 	for (id vc in self.pageScrollView.viewControllers) {
 		if ((NSNull *)vc != [NSNull null]) {
 			[vc didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+			
+			// make view controller visible again
+			if (vc != self.pageScrollView.currentController) {
+				[vc view].alpha = 1.0;
+			}
 		}
 	}
 }

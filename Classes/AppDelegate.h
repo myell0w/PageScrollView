@@ -7,6 +7,10 @@
 //
 
 
+#define MBApplicationDelegate ((AppDelegate*)[[UIApplication sharedApplication] delegate])
+
+CGRect MBApplicationFrame();
+
 #import <UIKit/UIKit.h>
 #import "MBPageScrollVC.h"
 #import "MBPageScrollView.h"

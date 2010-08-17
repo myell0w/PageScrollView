@@ -20,9 +20,10 @@ static NSArray *__pageControlColorList = nil;
 }
 
 // Load the view nib and initialize the pageNumber ivar.
-- (id)initWithPageNumber:(int)page {
+- (id)initWithPageNumber:(int)page pop:(BOOL)pop {
     if (self = [super initWithNibName:@"MyView" bundle:nil]) {
         pageNumber = page;
+		pop_ = pop;
         self.view.backgroundColor = [MyViewController pageControlColorWithIndex:page];
     }
     
@@ -48,8 +49,12 @@ static NSArray *__pageControlColorList = nil;
 }
 
 - (IBAction)pop:(id)sender {
-	NSLog(@"pop");
-	[self.navigationController popViewControllerAnimated:YES];
+	if (pop_) {
+		[self.navigationController popViewControllerAnimated:YES];
+	} else {
+		[self dismissModalViewControllerAnimated:YES];
+	}
+
 }
 
 @end

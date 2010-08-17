@@ -40,6 +40,8 @@
 	
 	// To be used when scrolls originate from the UIPageControl
     BOOL pageControlUsed_;
+	// inidicates if a rotation is currently in progress
+	BOOL isRotating_;
 	// page Number before Rotation starts
 	NSInteger pageBeforeRotation_;
 	// frame of the PageScrollView
@@ -50,6 +52,7 @@
 @property (nonatomic, retain) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, retain) IBOutlet UIPageControl *pageControl;
 @property (nonatomic, retain) NSMutableArray *viewControllers;
+@property (nonatomic, readonly) UIViewController *currentController;
 
 // Initializer
 - (id)initWithFrame:(CGRect)frame dataSource:(id<MBPageScrollViewDataSource>)dataSource delegate:(id<MBPageScrollViewDelegate>)delegate;
@@ -60,7 +63,8 @@
 
 // Action Methods
 - (IBAction)changePage:(id)sender;
-- (void)deviceDidRotate;
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation;
 
 @end
 

@@ -33,11 +33,15 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (![self p_isFooterCellAtIndexPath:indexPath]) {
 		MBApplicationDelegate.scrollEnabled = NO;
-		MyViewController *vc = [[[MyViewController alloc] initWithPageNumber:10] autorelease];
-		[self.viewController.navigationController pushViewController:vc animated:YES];
-//		
-		// scroll to specific page
-		//[MBApplicationDelegate loadPage:indexPath.row+1 animated:YES];
+		
+		if (indexPath.row == 0) {
+			MyViewController *vc = [[[MyViewController alloc] initWithPageNumber:10 pop:YES] autorelease];
+			[self.viewController.navigationController pushViewController:vc animated:YES];
+		} else {
+			MyViewController *vc = [[[MyViewController alloc] initWithPageNumber:10 pop:NO] autorelease];
+			[self.viewController presentModalViewController:vc animated:YES];
+		}
+
 	} 
 
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];

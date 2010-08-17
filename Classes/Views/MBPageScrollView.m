@@ -32,6 +32,7 @@
         dataSource_ = dataSource;
 		delegate_ = delegate;
 		viewFrame_ = frame;
+		isRotating_ = pageControlUsed_ = NO;
 		
 		// view controllers are created lazily
 		// in the meantime, load the array with placeholders which will be replaced on demand
@@ -55,7 +56,20 @@
 }
 
 - (void)releaseCachedController {
-	//TODO: implement
+	// Calculate the current page in scroll view
+	int currentPage = self.pageControl.currentPage;
+	
+	// unload the pages which are no longer visible
+	for (int i = 0; i < [self.viewControllers count]; i++) {
+		UIViewController *viewController = [self.viewControllers objectAtIndex:i];
+		
+		if((NSNull *)viewController != [NSNull null]) {
+			if(i < currentPage-1 || i > currentPage+1) {
+				[viewController.view removeFromSuperview];
+				[self.viewControllers replaceObjectAtIndex:i withObject:[NSNull null]];
+			}
+		}
+	}
 }
 
 - (void)dealloc {
@@ -74,6 +88,7 @@
 	CGRect frame = self.scrollView.frame;
 	frame.origin.x = frame.size.width * page;
 	frame.origin.y = 0;
+	
 	[self.scrollView scrollRectToVisible:frame animated:animated];
 }
 
@@ -94,6 +109,29 @@
 	[delegate_ didScrollToPage:page];
 }
 
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	isRotating_ = YES;
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+	
+	isRotating_ = NO;
+	
+	// save the page and restore it after the rotation
+	pageBeforeRotation_ = self.pageControl.currentPage;
+	
+	[self p_resizeScrollViewForOrientation:orientation];
+	[self p_loadScrollViewWithPage:pageBeforeRotation_];
+	
+	//LogRect(@"self.frame", self.frame);
+	//LogRect(@"self.scrollView.frame", self.scrollView.frame);
+}
+
+- (UIViewController *)currentController {
+	return [self.viewControllers objectAtIndex:self.pageControl.currentPage];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
@@ -104,7 +142,7 @@
     // We don't want a "feedback loop" between the UIPageControl and the scroll delegate in
     // which a scroll event generated from the user hitting the page control triggers updates from
     // the delegate method. We use a boolean to disable the delegate logic when the page control is used.
-    if (pageControlUsed_) {
+    if (pageControlUsed_ || isRotating_) {
         // do nothing - the scroll was initiated from the page control, not the user dragging
         return;
     }
@@ -145,19 +183,12 @@
 #pragma mark Private Methods
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-- (void)deviceDidRotate {
-	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-	
-	// save the page and restore it after the rotation
-	pageBeforeRotation_ = self.pageControl.currentPage;
-	
-	[self p_resizeScrollViewForOrientation:orientation];
-}
-
 - (CGRect)p_framePosition:(CGRect)frame forPage:(int)page {
 	// Calculate frame position
 	frame.origin.x = frame.size.width * page;
 	frame.origin.y = 0;
+	
+	//LogRect(@"vc.frame", frame);
 	
 	return frame;
 }
@@ -202,9 +233,12 @@
 
 - (void)p_initScrollView {
     // init scrollview
-	self.scrollView = [[[UIScrollView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
+	//TODO: Startup BUG - Landscape - 
+	//Fix works only for iPad - for iPhone replace CGRect with MBRectMake
+	//self.scrollView = [[[UIScrollView alloc] initWithFrame:CGRectMake(0.,0.,768.,1024.)] autorelease];
+	self.scrollView = [[[UIScrollView alloc] initWithFrame:MBApplicationFrame()] autorelease];
     self.scrollView.pagingEnabled = YES;
-	[self p_resizeScrollViewForOrientation:[[UIDevice currentDevice] orientation]];
+	[self p_resizeScrollViewForOrientation:[[UIDevice currentDevice]orientation]];
 	
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.showsVerticalScrollIndicator = NO;
@@ -226,10 +260,16 @@
 	[self addSubview:self.pageControl];
 	
     
+	// lazy loading - commented out
     // load the visible page - pages are created on demand
-    [self p_loadScrollViewWithPage:0];
+    //[self p_loadScrollViewWithPage:0];
     // load the page on either side to avoid flashes when the user starts scrolling
-    [self p_loadScrollViewWithPage:1];
+    //[self p_loadScrollViewWithPage:1];
+	
+	// load all pages on startup
+	for (int i=0;i<[dataSource_ numberOfPages];i++) {
+		[self p_loadScrollViewWithPage:i];
+	}
 }
 
 - (void)p_loadScrollViewWithPage:(int)page {

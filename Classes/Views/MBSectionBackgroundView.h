@@ -12,7 +12,7 @@
 @interface MBSectionBackgroundView : UIView {
     NSString *imageName_;
     UIImage *image_;
-    UIImage *imageLanscape_;
+    UIImage *imageLandscape_;
 }
 
 // Properties

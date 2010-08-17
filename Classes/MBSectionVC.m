@@ -41,7 +41,7 @@
   backgroundImageName:(NSString *)imageName {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
 		// load background view
-		backgroundView_ = [[MBSectionBackgroundView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame] 
+		backgroundView_ = [[MBSectionBackgroundView alloc] initWithFrame:MBApplicationFrame()
 															   imageName:imageName];
 	}
     
@@ -62,7 +62,7 @@
 
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 - (void)loadView {
-	UIView *v = [[[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
+	UIView *v = [[[UIView alloc] initWithFrame:MBApplicationFrame()] autorelease];
 	// set own view
 	self.view = v;
 	
@@ -87,6 +87,10 @@
 		
 		[self.view addSubview:tableView_];
 	}
+	
+	self.view.backgroundColor = [UIColor colorWithRed:164/255.f green:172/255.f blue:179/255.f alpha:1.0f];
+	self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	self.view.contentMode = UIViewContentModeScaleToFill;
 }
 
 /*
@@ -116,11 +120,14 @@
 }
 
 
-/*
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+	
+	tableView_.alpha = 1.0;
+	tableView_.frame = [self p_tableViewFrameForCurrentDevice];
 }
-*/
+
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -150,27 +157,15 @@
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
 	[super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-
-	CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
 	
 	// clip to bounds during orientation to prevent one page from appearing on the next one during orientation
-	self.view.clipsToBounds = YES;
+	//self.view.clipsToBounds = YES;
 	
-	// change frame of backgroundView according to orientation animated => always maximized
-	[UIView beginAnimations:@"Rotate" context:nil];
+	[UIView beginAnimations:@"MoveTable" context:nil];
 	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-	[UIView setAnimationDuration:duration];
-	if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation)) {
-		self.backgroundView.frame = CGRectMake(appFrame.origin.x, appFrame.origin.y,
-											   appFrame.size.width, appFrame.size.height);
-	} else {
-		self.backgroundView.frame = CGRectMake(appFrame.origin.y, appFrame.origin.x,
-											   appFrame.size.height, appFrame.size.width);
-	}
-	
-	// compute new position of tableView
-	tableView_.frame = [self p_tableViewFrameForCurrentDevice];
-	// stop animating
+	[UIView setAnimationDuration:0.1];
+	// fade out
+	tableView_.alpha = 0.0;
 	[UIView commitAnimations];
 	
 }
@@ -178,7 +173,14 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 	// stop clipping to bounds after orientation
-	self.view.clipsToBounds = NO;
+	//self.view.clipsToBounds = NO;
+	
+	[UIView beginAnimations:@"MoveTable" context:nil];
+	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
+	// compute new position of tableView
+	tableView_.frame = [self p_tableViewFrameForCurrentDevice];
+	tableView_.alpha = 1.0;
+	[UIView commitAnimations];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +192,7 @@
 	int numberOfRows = [delegate_ numberOfRows];
 	CGFloat marginLeft = 0.;
 	CGFloat marginBottom = MARGIN_BOTTOM_IPHONE;
-	CGFloat width = self.backgroundView.frame.size.width;
+	CGFloat width = self.view.frame.size.width;
 	CGFloat height = -1;
 	
 	if ([[UIDevice currentDevice] isIPad]) {
@@ -201,7 +203,7 @@
 	
 	height = numberOfRows * CELL_HEIGHT + marginBottom;
 	
-	return CGRectMake(self.backgroundView.frame.origin.x + marginLeft, self.backgroundView.frame.size.height - height, width, height);
+	return CGRectMake(self.view.frame.origin.x + marginLeft, self.view.frame.size.height - height, width, height);
 }
 
 @end

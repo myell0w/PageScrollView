@@ -10,8 +10,21 @@
 #import "MyViewController.h"
 #import "MBSectionVC.h"
 #import "MBSectionDelegate.h"
-#import "MBNavigationController.h"
 #import "MBOverviewSectionDelegate.h"
+
+// returns the application frame in the correct orientation
+CGRect MBApplicationFrame() {
+	CGRect appFrame = [[UIScreen mainScreen] applicationFrame];
+	UIInterfaceOrientation orientation = [[UIDevice currentDevice] orientation];
+	int max = MAX(appFrame.size.width, appFrame.size.height);
+	int min = MIN(appFrame.size.width, appFrame.size.height);
+	
+	if (UIInterfaceOrientationIsLandscape(orientation)) {
+		return CGRectMake(0.f, 0.f, max, min);
+	} else {
+		return CGRectMake(0.f, 0.f, min, max);
+	}
+}
 
 
 
@@ -95,28 +108,27 @@ static NSUInteger kNumberOfPages = 5;
 - (UIViewController *)viewControllerForPage:(NSUInteger)page {
 	MBSectionVC *vc;
 	MBSectionDelegate *delegate;
-	
+		
 	switch (page) {
 		case 0:
         case 1:
 			vc = [[[MBSectionVC alloc] initWithNibName:nil bundle:nil backgroundImageName:@"Home"] autorelease];
 			delegate = [[[MBOverviewSectionDelegate alloc] initWithViewController:vc 
-																	   cellTitles:[NSArray arrayWithObjects:MBLocalize(@"Push1"), MBLocalize(@"Push2"), nil]] autorelease];
+																	   cellTitles:[NSArray arrayWithObjects:MBLocalize(@"NavCtrl.pushViewController"), MBLocalize(@"PresentModalVC"), nil]] autorelease];
 			vc.delegate = delegate;
 			[self.sectionDelegates addObject:delegate];
 			break;
 																									
 		default:
-			vc = [[[MyViewController alloc] initWithPageNumber:page] autorelease];
+			vc = [[[MyViewController alloc] initWithPageNumber:page pop:YES] autorelease];
 			break;
 	}
-	
     
-	//UINavigationController *nc = [[[MBNavigationController alloc] initWithRootViewController:vc] autorelease];
-	//nc.delegate = self;
-	//return nc;
-    
-    return vc;
+UINavigationController *nc = [[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
+nc.navigationBarHidden = YES;
+nc.delegate = self;
+
+    return nc;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,10 +146,13 @@ static NSUInteger kNumberOfPages = 5;
 
 - (void)navigationController:(UINavigationController *)navigationController 
 	  willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+	[viewController viewWillAppear:animated];
+	
 	// did it return to the first level?
 	if ([viewController isKindOfClass:[MBSectionVC class]]) {
 		self.scrollEnabled = YES;
 	}
+	
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
