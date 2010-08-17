@@ -58,7 +58,7 @@ static NSUInteger kNumberOfPages = 5;
     RELEASE(window);
 	RELEASE(rootVC_);
 	RELEASE(sectionDelegates_);
-            
+	
     [super dealloc];
 }
 
@@ -108,7 +108,7 @@ static NSUInteger kNumberOfPages = 5;
 - (UIViewController *)viewControllerForPage:(NSUInteger)page {
 	MBSectionVC *vc;
 	MBSectionDelegate *delegate;
-		
+	
 	switch (page) {
 		case 0:
         case 1:
@@ -118,16 +118,16 @@ static NSUInteger kNumberOfPages = 5;
 			vc.delegate = delegate;
 			[self.sectionDelegates addObject:delegate];
 			break;
-																									
+			
 		default:
 			vc = [[[MyViewController alloc] initWithPageNumber:page pop:YES] autorelease];
 			break;
 	}
     
-UINavigationController *nc = [[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
-nc.navigationBarHidden = YES;
-nc.delegate = self;
-
+	UINavigationController *nc = [[[UINavigationController alloc] initWithRootViewController:vc] autorelease];
+	nc.navigationBarHidden = YES;
+	nc.delegate = self;
+	
     return nc;
 }
 

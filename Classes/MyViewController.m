@@ -53,6 +53,7 @@ static NSArray *__pageControlColorList = nil;
 		[self.navigationController popViewControllerAnimated:YES];
 	} else {
 		[self dismissModalViewControllerAnimated:YES];
+		MBApplicationDelegate.scrollEnabled = YES;
 	}
 
 }
